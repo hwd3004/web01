@@ -31,6 +31,11 @@ dependencies {
 	
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	
+	// 스프링 시큐리티
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// thymeleaf에서 스프링 시큐리티를 사용 가능하게 해줌
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 }
 
 test {

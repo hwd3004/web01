@@ -3,8 +3,167 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{common/layout}">
 
-<section layout:fragment="contents">
-	<h1>테스트</h1>
-</section>
+<section layout:fragment="content">
+	<div class="container wrap__content">
+		<div class="col-md-6 col-md-offset-3 container">
+			<div th:if="!${#request.isUserInRole('USER')}">
 
-</html>
+				<!-- 스프링 시큐리티에서 form 태그로 로그인을 진행할 때, username과 password가 매개변수로 넘어가는게 기본 설정 -->
+				<form th:action="@{/user/login}" class="form-horizontal" method="post" id="login-frm">
+					<div class="form-group">
+						<label for="inputEmail3" class="col-sm-2 control-label">아이디</label>
+						<div>
+							<input type="text" class="form-control" name="username" id="username" placeholder="user-id">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+						<div>
+							<input type="password" class="form-control" id="password" name="password"
+								placeholder="Password">
+						</div>
+					</div>
+
+					<!-- 로그인 실패시 에러 메세지 출력 -->
+					<span th:text="${errorMsg}" style="color: red"></span>
+
+
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-5">
+
+							<button type="button" class="btn btn-default" id="login-btn">Sign in</button>
+							<button type="button" class="btn btn-primary" data-toggle="modal"
+								data-target="#accountUserModal">회원가입</button>
+						</div>
+					</div>
+				</form>
+			</div>
+
+
+			<div class="modal fade" id="accountUserModal" tabindex="-1" role="dialog"
+				aria-labelledby="accountUserLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="accountUserLabel">회원 가입</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form>
+								<div class="form-group">
+									<label for="user_name">이름</label> <input type="text" class="form-control" id="userName"
+										placeholder="이름을 입력하세요">
+								</div>
+								<div class="form-group">
+									<label for="user_id">아이디</label> <input type="text" class="form-control" id="userId"
+										placeholder="아이디를 입력하세요">
+								</div>
+								<div class="form-group">
+									<label for="password">패스워드</label> <input class="form-control" id="initPassword"
+										placeholder="비밀번호을 입력하세요"></input>
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+							<button type="button" class="btn btn-primary" id="btn-save">가입</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="/js/lib/jquery.min.js"></script>
+	<script src="/js/lib/bootstrap.min.js"></script>
+	<script>
+		const main = {
+				init: function(){
+					$("#login-btn").on("click", () => {
+						this.userLogin();
+					});
+					$("#btn-save").on("click", () => {
+						this.userSignup();
+					});
+				},
+				userLogin: () => {
+					$("#login-frm").submit();
+				},
+				csrf: {
+					token: $("meta[name='_csrf']").attr("content"),
+					header: $("meta[name='_csrf_header']").attr("content")
+				},
+				userSignup: function(){
+					const validation = (user)=>{
+						const {userName, userId, password} = user;
+						
+						// 정규식
+						// https://blogpack.tistory.com/560
+						// https://kkh0977.tistory.com/1099
+						// 특수문자, 괄호, 점, 공백 제거
+						const checkSpc = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/ ]/gim;
+						
+						// 정규식 통과하면 false, 걸리는게 있으면 true 리턴 
+						// console.log(checkSpc.test(userName));
+						
+						if(!userName || checkSpc.test(userName)){
+							alert("유저 이름을 다시 입력해주세요")
+							return false;
+						}
+						
+						if(!userId || checkSpc.test(userId)){
+							alert("아이디를 다시 입력해주세요")
+							return false;
+						}
+						
+						if(!password || checkSpc.test(password)){
+							alert("패스워드를 다시 입력해주세요")
+							return false;
+						}
+						
+						return true;
+					} // validation end
+					
+					const user = {
+							userName: $("#userName").val(),
+							userId: $("#userId").val(),
+							password: $("#initPassword").val(),
+					}
+					
+					// https://hyunsangwon93.tistory.com/28
+					// 스프링 부트 csrf ajax 전송 방법
+					// console.log("csrf", this.csrf);
+					const {header, token} = this.csrf;
+					
+					
+					if(validation(user)){
+						$.ajax({
+							type: "POST",
+							url: "/users/signup", // RestController
+							dataType: "json",
+							contentType: "application/json; charset=utf-8",
+							data: JSON.stringify(user),
+							beforeSend: function(xhr){
+								  xhr.setRequestHeader(header, token);
+							}
+						}).done(function(result){
+							if(result.msg === "save"){
+								alert("가입이 되었습니다.");
+								location.reload();
+							} else {
+								alert("가입 실패");
+								location.reload();
+							}
+						}).fail(function(error){
+							console.log(error);
+						});
+					}
+				}
+				
+		}
+
+		main.init();
+	</script>
+</section>

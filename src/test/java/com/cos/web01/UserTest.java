@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.cos.web01.service.domain.user.User;
-import com.cos.web01.service.domain.user.UserRepository;
+import com.cos.web01.domain.user.UserRepository;
+import com.cos.web01.domain.user.Users;
 
 @SpringBootTest
 public class UserTest {
@@ -17,15 +17,15 @@ public class UserTest {
 
 	@Test
 	public void test100_유저추가() {
-		userRepository.save(User.builder().userId("테스트아이디").password("test").userName("테스트네임").build());
+		userRepository.save(Users.builder().userId("테스트아이디").password("test").userName("테스트네임").build());
 
-		List<User> userList = userRepository.findAll();
+		List<Users> userList = userRepository.findAll();
 
 		System.out.println(userList.toString());
 
 //		User user = userList.get(0);
 
-		for (User user : userList) {
+		for (Users user : userList) {
 			System.out.println(user.toString());
 		}
 

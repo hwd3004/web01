@@ -3,30 +3,65 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-<meta charset="UTF-8" />
+<meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>web01</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
+<!-- https://hyunsangwon93.tistory.com/28 -->
+<!-- 스프링 부트 csrf ajax 전송 방법 -->
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+<title>web01</title>
 <!-- 부트스트랩 -->
-<link rel="stylesheet" href="../static/css/lib/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/lib/bootstrap.min.css" />
+
+<style>
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.wrap__content {
+	margin-top: 100px;
+}
+
+header, .nav {
+	padding: 20px;
+}
+</style>
 </head>
 <body>
 	<header>
-		<h2>테스트 레이아웃</h2>
+		<h4>simple web</h4>
 	</header>
+	<ul class="nav nav-tabs">
 
-	<nav>
-		<a href="/">main</a> <a href="/hello">hello</a>
-	</nav>
+		<!-- 사용자가 USER 권한이 없을 때 -->
+		<li th:if="!${#request.isUserInRole('USER')}" role="presentation"><a href="/"><button
+					class="btn btn-sm btn-outline-secondary">MAIN</button></a></li>
 
-	<section layout:fragment="contents"></section>
+		<!-- th:href - thymeleaf에서 url 표현 -->
+		<!-- https://zamezzz.tistory.com/308 -->
+		<li sec:authorize="hasRole('ROLE_USER')" role="presentation"><a th:href="@{/board}"><button
+					class="btn btn-sm btn-outline-secondary">게시판</button></a></li>
 
+		<li sec:authorize="hasRole('ROLE_USER')" role="presentation"><a th:href="@{/info}"><button
+					class="btn btn-sm btn-outline-secondary">내 정보</button></a></li>
+
+		<li sec:authorize="hasRole('ROLE_USER')" role="presentation"><a th:href="@{/user/logout}"><button
+					class="btn btn-sm btn-outline-secondary">로그아웃</button></a></li>
+
+	</ul>
+
+	<section layout:fragment="content"></section>
 	<footer>
-		<p>footer</p>
+		<div class="footer-copyright text-center py-3">footer</div>
 	</footer>
 
-	<script src="../static/js/lib/jquery.min.js"></script>
-	<script src="../static/js/lib/bootstrap.min.js"></script>
+	<!-- Jquery, bootstrap -->
+	<script src="/js/lib/jquery.min.js"></script>
+	<script src="/js/lib/bootstrap.min.js"></script>
+
 </body>
 </html>

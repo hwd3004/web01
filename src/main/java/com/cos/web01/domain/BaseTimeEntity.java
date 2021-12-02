@@ -1,6 +1,5 @@
-package com.cos.web01.service.domain;
+package com.cos.web01.domain;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 
 import javax.persistence.EntityListeners;
