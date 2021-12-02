@@ -15,11 +15,6 @@ public class WebRestController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@GetMapping({ "", "/" })
-	public String index() {
-		return "hello";
-	}
-
 	@PostMapping("/user")
 	public void saveUser(@RequestBody UserSaveRequestDto dto) {
 		userRepository.save(dto.toEntity());
