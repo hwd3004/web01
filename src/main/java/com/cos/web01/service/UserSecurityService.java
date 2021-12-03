@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.cos.web01.config.auth.PrincipalDetail;
 import com.cos.web01.domain.dto.UserSaveRequestDto;
 import com.cos.web01.domain.user.UserRepository;
 import com.cos.web01.domain.user.Users;
@@ -48,12 +49,15 @@ public class UserSecurityService implements UserDetailsService {
 		Optional<Users> userEntity = userRepository.findByUserId(userId);
 		Users findUser = userEntity.get();
 
+//		권한은 하나만 갖고 있는게 여러개를 갖고 있을 수도 있음
 		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
 		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
 //		import org.springframework.security.core.userdetails.User;
 		return new User(findUser.getUserId(), findUser.getPassword(), authorities);
+
+//		return new PrincipalDetail(findUser, authorities);
 	}
 
 	@Transactional
@@ -63,6 +67,11 @@ public class UserSecurityService implements UserDetailsService {
 		Users user = users.get();
 
 		user.changeUserName(changeName);
+	}
+
+	@Transactional
+	public void deleteUser(String userId) {
+		userRepository.deleteByUserId(userId);
 	}
 
 }

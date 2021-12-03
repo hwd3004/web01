@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,4 +64,16 @@ public class WebRestController {
 		return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.OK);
 
 	}
+
+	@DeleteMapping("/user")
+	public ResponseEntity<Map<String, Object>> deleteUser(Principal principal) {
+		String userId = principal.getName();
+
+		userSecurityService.deleteUser(userId);
+
+		Map<String, Object> responseMap = new HashMap<String, Object>();
+
+		return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.OK);
+	}
+
 }
