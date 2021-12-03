@@ -21,8 +21,6 @@ public class LoginFailHandler implements AuthenticationFailureHandler {
 
 		String errorMsg = exception.getMessage();
 		request.setAttribute("errorMsg", errorMsg);
-		
-		System.out.println("로그인 에러");
 
 		request.getRequestDispatcher("/login/fail").forward(request, response);
 

@@ -84,8 +84,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public AuthenticationFailureHandler loginFailHandler() {
 //		로그인 오류 처리 설정
-		
-		System.out.println("SecurityConfig loginFailHandler() 호출");
 
 		return new LoginFailHandler();
 	}

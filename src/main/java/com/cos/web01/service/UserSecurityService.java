@@ -53,10 +53,16 @@ public class UserSecurityService implements UserDetailsService {
 		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
 //		import org.springframework.security.core.userdetails.User;
-		return new User(findUser.getUserId(), findUser.getPassword(),
-				authorities);
+		return new User(findUser.getUserId(), findUser.getPassword(), authorities);
 	}
-	
-	
+
+	@Transactional
+	public void changeUserName(String userId, String changeName) {
+		Optional<Users> users = userRepository.findByUserId(userId);
+
+		Users user = users.get();
+
+		user.changeUserName(changeName);
+	}
 
 }

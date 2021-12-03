@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.cos.web01.domain.BaseTimeEntity;
 
 import lombok.AccessLevel;
@@ -16,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 기본 생성자 생성 방지
 @Data
 @Entity
+@DynamicUpdate // JPA 어노테이션, 실제 값이 변경된 칼럼으로만 업데이트 쿼리를 만듬
 public class Users extends BaseTimeEntity {
 
 	@Id // primary key
@@ -34,6 +37,12 @@ public class Users extends BaseTimeEntity {
 	public Users(String userId, String password, String userName) {
 		this.userId = userId;
 		this.password = password;
+		this.userName = userName;
+	}
+
+	public void changeUserName(String userName) {
+		// 엔티티의 값을 수정할 수 있는 메소드
+
 		this.userName = userName;
 	}
 }
