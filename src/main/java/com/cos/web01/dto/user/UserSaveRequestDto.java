@@ -1,4 +1,4 @@
-package com.cos.web01.domain.dto;
+package com.cos.web01.dto.user;
 
 import com.cos.web01.domain.user.Users;
 

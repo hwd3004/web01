@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cos.web01.domain.dto.UserSaveRequestDto;
-import com.cos.web01.domain.user.UserRepository;
+import com.cos.web01.domain.boards.Boards;
+import com.cos.web01.dto.user.UserSaveRequestDto;
+import com.cos.web01.service.BoardService;
 import com.cos.web01.service.UserSecurityService;
 
 import lombok.AllArgsConstructor;
@@ -25,6 +26,9 @@ public class WebRestController {
 
 	@Autowired
 	private UserSecurityService userSecurityService;
+
+	@Autowired
+	private BoardService boardService;
 
 	@PostMapping("/users/signup")
 	public ResponseEntity<Map<String, Object>> saveUsers(@RequestBody UserSaveRequestDto dto) {
@@ -74,6 +78,22 @@ public class WebRestController {
 		Map<String, Object> responseMap = new HashMap<String, Object>();
 
 		return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.OK);
+	}
+
+	@PostMapping("/post/save")
+	public ResponseEntity<Map<String, Object>> save(@RequestBody Boards boards, Principal principal) {
+
+		String userId = principal.getName();
+
+		System.out.println(boards);
+
+		boardService.savePost(boards, userId);
+
+		Map<String, Object> responseMap = new HashMap<>();
+
+		responseMap.put("msg", "save");
+
+		return new ResponseEntity<>(responseMap, HttpStatus.OK);
 	}
 
 }

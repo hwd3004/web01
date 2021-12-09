@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{common/layout}"
+>
+  <section layout:fragment="content">
+    <div class="container wrap__content">
+      <div>
+        <span>제목 : </span> <span th:text="${post.title}"></span>
+        <hr />
+        <span>작성자 : </span><span th:text="${post.author.userName}"></span>
+        &emsp;
+        <span>작성일 : </span>
+        <span th:text="${post.createdDate}"></span>
+        <br />
+        <hr />
+        <div>
+          <p>내용</p>
+          <br />
+          <p th:text="${post.content}"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</html>

@@ -15,10 +15,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.cos.web01.config.auth.PrincipalDetail;
-import com.cos.web01.domain.dto.UserSaveRequestDto;
 import com.cos.web01.domain.user.UserRepository;
 import com.cos.web01.domain.user.Users;
+import com.cos.web01.dto.user.UserSaveRequestDto;
 
 import lombok.AllArgsConstructor;
 
@@ -31,9 +30,9 @@ public class UserSecurityService implements UserDetailsService {
 
 	@Transactional // DB에 접근하는 여러 연산을 하나의 트랜잭션으로 처리하여 오류가 발생한 경우 롤백을 도와줌
 	public Long accountUser(UserSaveRequestDto saveDto) {
-//		회원가입에 대한 메소드
+		// 회원가입에 대한 메소드
 
-//		클라이언트에서 전달한 패스워드를 해쉬 암호화 작업
+		// 클라이언트에서 전달한 패스워드를 해쉬 암호화 작업
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		saveDto.setPassword(passwordEncoder.encode(saveDto.getPassword()));
 
@@ -49,15 +48,15 @@ public class UserSecurityService implements UserDetailsService {
 		Optional<Users> userEntity = userRepository.findByUserId(userId);
 		Users findUser = userEntity.get();
 
-//		권한은 하나만 갖고 있는게 여러개를 갖고 있을 수도 있음
+		// 권한은 하나만 갖고 있는게 여러개를 갖고 있을 수도 있음
 		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
 		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-//		import org.springframework.security.core.userdetails.User;
+		// import org.springframework.security.core.userdetails.User;
 		return new User(findUser.getUserId(), findUser.getPassword(), authorities);
 
-//		return new PrincipalDetail(findUser, authorities);
+		// return new PrincipalDetail(findUser, authorities);
 	}
 
 	@Transactional
