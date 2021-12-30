@@ -1,5 +1,7 @@
 package com.cos.web01.service;
 
+import java.util.Optional;
+
 import com.cos.web01.domain.boards.Boards;
 import com.cos.web01.domain.boards.BoardsRepository;
 import com.cos.web01.domain.user.UserRepository;
@@ -39,5 +41,29 @@ public class BoardService {
 
 		return boards;
 	}
+
+	public void deletePost(Long postId, String userId) {
+		Users users = userRepository.findByUserId(userId).get();
+
+		Boards boards = boardsRepository.findById(postId).get();
+
+		// System.out.println("데이터 : " + users.getUserId());
+		// System.out.println("데이터 : " + boards.getAuthor().getUserId());
+
+		if (users.getUserId().equals(boards.getAuthor().getUserId())) {
+			boardsRepository.deleteById(postId);
+		}
+
+	}
+
+	// @Transactional
+	// public void deletePost(Long postId, String userId) {
+	// Users user = usersRepository.findByUserId(userId).get();
+	// Boards board = boardRepository.findById(postId).get();
+
+	// if (user.getUserId().equals(board.getAuthor().getUserId()) ) {
+	// board.deletePost();
+	// }
+	// }
 
 }

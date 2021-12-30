@@ -43,7 +43,7 @@ header, .nav {
 
 		<!-- th:href - thymeleaf에서 url 표현 -->
 		<!-- https://zamezzz.tistory.com/308 -->
-		<li sec:authorize="hasRole('ROLE_USER')" role="presentation"><a th:href="@{/board}"><button
+		<li sec:authorize="hasRole('ROLE_USER')" role="presentation"><a th:href="@{/board?page=1}"><button
 					class="btn btn-sm btn-outline-secondary">게시판</button></a></li>
 
 		<li sec:authorize="hasRole('ROLE_USER')" role="presentation"><a th:href="@{/info}"><button

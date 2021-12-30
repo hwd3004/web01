@@ -9,12 +9,15 @@
   <section layout:fragment="content">
     <div class="container wrap__content">
       <div>
+        <input type="hidden" id="authorId" th:value="${post.author.userId}" />
+        <input type="hidden" id="userId" th:value="${#authentication.principal.Username}" />
+        <input type="hidden" id="postId" th:value="${post.id}" />
         <span>제목 : </span> <span th:text="${post.title}"></span>
         <hr />
         <span>작성자 : </span><span th:text="${post.author.userName}"></span>
         &emsp;
         <span>작성일 : </span>
-        <span th:text="${post.createdDate}"></span>
+        <span th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}"></span>
         <br />
         <hr />
         <div>
@@ -23,6 +26,84 @@
           <p th:text="${post.content}"></p>
         </div>
       </div>
+
+      <div class="text-right">
+        <button
+          th:if="${#authentication.principal.Username} == ${post.author.userId}"
+          type="button"
+          class="btn btn-warning"
+          id="post-fix-btn"
+        >
+          수정
+        </button>
+
+        <button
+          th:if="${#authentication.principal.Username} == ${post.author.userId}"
+          type="button"
+          class="btn btn-danger"
+          id="post-del-btn"
+        >
+          삭제
+        </button>
+      </div>
     </div>
+
+    <script src="/js/lib/jquery.min.js"></script>
+    <script>
+      const userId = $("#userId").val();
+      const authorId = $("#authorId").val();
+      const postId = $("#postId").val();
+
+      // console.log("userId : ", userId);
+      // console.log("authorId : ", authorId);
+
+      const postDetail = {
+        init: function () {
+          $("#post-fix-btn").on("click", () => {});
+          $("#post-del-btn").on("click", () => {
+            this.deletePost();
+          });
+        },
+        csrf: {
+          token: $("meta[name='_csrf']").attr("content"),
+          header: $("meta[name='_csrf_header']").attr("content"),
+        },
+        deletePost: function () {
+          const { header, token } = this.csrf;
+
+          if (userId == authorId) {
+            if (confirm("삭제하시겠습니까?")) {
+              $.ajax({
+                type: "DELETE",
+                url: `/post/${postId}`,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader(header, token);
+                },
+              })
+                .done(function (result) {
+                  if (result.msg == "success") {
+                    alert("게시글이 삭제되었습니다.");
+                    location.href = "/board?page=1";
+                  } else {
+                    alert("게시글 삭제가 실패하였습니다.");
+                    location.reload();
+                  }
+                })
+                .fail(function (error) {
+                  alert("에러");
+                  console.log(error);
+                });
+            } else {
+            }
+          } else {
+            alert("권한이 없습니다.");
+          }
+        },
+      };
+
+      postDetail.init();
+    </script>
   </section>
 </html>
