@@ -27,6 +27,10 @@ services:
     container_name: app01
     networks:
       - temp_network
+    environment:
+      - SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/web01
+      - SPRING_DATASOURCE_USERNAME: root
+      - SPRING_DATASOURCE_PASSWORD: 1234
 
 networks:
   temp_network:
