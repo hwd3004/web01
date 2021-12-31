@@ -2,14 +2,14 @@ version: '3'
 
 services:
   database:
-    image: mysql
+    image: mysql:5.7
     container_name: database
     environment:
       - MYSQL_DATABASE=web01
       - MYSQL_ROOT_HOST=%
       - MYSQL_ROOT_PASSWORD=1234
-      - MYSQL_USER=temp
-      - MYSQL_PASSWORD=1234
+      # - MYSQL_USER=temp
+      # - MYSQL_PASSWORD=1234
     command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
     ports:
       - 3306:3306
@@ -32,7 +32,7 @@ services:
       - temp_network
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/web01?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: temp
+      SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1234
     expose:
       - 80
