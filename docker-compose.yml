@@ -2,7 +2,7 @@ version: '3'
 
 services:
   database:
-    image: mysql:5.7
+    image: mysql
     container_name: database
     environment:
       - MYSQL_DATABASE=web01
