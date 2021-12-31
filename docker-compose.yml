@@ -6,7 +6,7 @@ services:
     container_name: database
     environment:
       - MYSQL_DATABASE=web01
-      - MYSQL_ROOT_HOST=%
+      - MYSQL_ROOT_HOST='%'
       - MYSQL_ROOT_PASSWORD=1234
       # - MYSQL_USER=temp
       # - MYSQL_PASSWORD=1234
@@ -30,10 +30,10 @@ services:
     container_name: app01
     networks:
       - temp_network
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/web01?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1234
+    # environment:
+    #   SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/web01?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    #   SPRING_DATASOURCE_USERNAME: root
+    #   SPRING_DATASOURCE_PASSWORD: 1234
     expose:
       - 80
 
