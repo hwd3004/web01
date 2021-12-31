@@ -17,6 +17,8 @@ services:
       - /home/web01/database/db/:/var/lib/mysql
     networks:
       - temp_network
+    expose:
+      - 3306
   
   application:
     build: .
@@ -32,6 +34,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/web01?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: temp
       SPRING_DATASOURCE_PASSWORD: 1234
+    expose:
+      - 80
 
 networks:
   temp_network:
