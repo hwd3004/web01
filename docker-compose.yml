@@ -3,7 +3,7 @@ version: '3'
 services:
   database:
     image: mysql
-    container_name: mysql_db
+    container_name: database
     environment:
       - MYSQL_DATABASE=web01
       - MYSQL_ROOT_HOST=%
