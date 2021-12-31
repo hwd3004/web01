@@ -18,7 +18,7 @@ services:
   
   application:
     build: .
-    restart: on-failure
+    restart: always
     ports:
       - 80:80
     depends_on:
